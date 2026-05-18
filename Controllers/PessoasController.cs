@@ -129,4 +129,5 @@ namespace CRUD_Dapper.Controllers
                 throw ex;
             }
         }
+    }
 }
