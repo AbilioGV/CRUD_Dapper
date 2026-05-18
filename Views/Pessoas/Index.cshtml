@@ -43,8 +43,10 @@
                 @Html.DisplayFor(modelItem => item.Peso)
             </td>
             <td>
-                <a asp-controller="Pessoas" asp-action="Edit" asp-route-pessoaid="item.PessoaId" class="btn btn-outline-info btn-sm">Atualizar</a>
-                <a asp-controller="Pessoas" asp-action="Delete" asp-route-pessoaid="item.PessoaId" class="btn btn-outline-danger btn-sm">Excluir</a>
+                <a asp-controller="Pessoas" asp-action="Edit" asp-route-pessoaid="@item.PessoaId" class="btn btn-outline-info btn-sm">Atualizar</a> &emsp;
+                <form asp-controller="Pessoas" asp-action="Delete" asp-route-pessoaid="@item.PessoaId" onclick="confirm('Prosseguir com a exclusão do usuário @item.Nome ?')">
+                      <button type="submit" class="btn btn-outline-danger btn-sm">Excluir</button> 
+                </form>
             </td>
         </tr>
 }

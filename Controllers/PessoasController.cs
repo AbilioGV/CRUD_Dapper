@@ -63,5 +63,70 @@ namespace CRUD_Dapper.Controllers
                 return View(pessoas);
            
         }
-    }
+
+        [HttpGet]  
+        public IActionResult Edit(int pessoaid)
+        {
+            IDbConnection con;
+
+            try
+            {
+                string selecaoQuery = "SELECT * FROM pessoas WHERE PessoaId = @pessoaid";
+                con = new NpgsqlConnection(ConnectionString);
+                con.Open();
+                Pessoas pessoas = con.Query<Pessoas>(selecaoQuery, new { pessoaid = pessoaid }).FirstOrDefault();
+                const.Close();
+                return View(pessoas);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int pessoaid, Pessoas pessoas)
+        {
+            if (pessoaid != pessoas.PessoaId)
+                return NotFound();
+            
+            if (ModelState.IsValid)
+            {
+                IDbConnection con;
+
+                try
+                {
+                    string atualizarQuery = "UPDATE pessoas SET nome = @nome, idade = @idade, peso = @peso WHERE PessoaId = @pessoaid";
+                    con = new NpgsqlConnection(ConnectionString);
+                    con.Open();
+                    con.Execute(atualizarQuery, pessoas);
+                    con.Close();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+
+            return View(pessoas);
+        }
+        [HttpPost]
+        public IActionResult Delete(int pessoaid)
+        {
+            IDbConnection con;
+            try
+            {
+                string excluirQuery = "DELETE FROM pessoas WHERE PessoaId = @pessoaid";
+                con = new NpgsqlConnection(ConnectionString);
+                con.Open();
+                con.Execute(excluirQuery, new { pessoaid = pessoaid });
+                con.Close();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 }
